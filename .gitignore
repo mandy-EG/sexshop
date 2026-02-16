@@ -1,0 +1,20 @@
+# General
+.DS_Store
+.VSCode/
+.idea/
+*.log
+
+# Build results
+[Bb]in/
+[Oo]bj/
+
+# Node
+node_modules/
+dist/
+coverage/
+
+# Dotnet
+.vs/
+*.user
+*.suo
+*.userprefs
