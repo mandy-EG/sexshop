@@ -127,41 +127,18 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Enable Swagger in all environments for debugging accessibility
-app.UseSwagger();
-app.UseSwaggerUI(c => {
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Velvet & Ivory API V1");
-    c.RoutePrefix = "swagger"; // Ensure it stays on /swagger
-});
-
-if (app.Environment.IsDevelopment())
-{
-    // ... development specific config if any later
-}
-
-app.UseCors("AllowAll");
-
-// app.UseHttpsRedirection(); // Disabled to prevent CORS issues with HTTP frontend calls
-
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.MapControllers();
-
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<AppDbContext>();
-    
-    // Auto-migrate database on startup
-    try 
+    try
     {
-        context.Database.Migrate();
+        var context = services.GetRequiredService<AppDbContext>();
+        await context.Database.MigrateAsync();
     }
     catch (Exception ex)
     {
         var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred while migrating the database.");
+        logger.LogError(ex, "An error occurred during database migration.");
     }
 
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
@@ -202,6 +179,29 @@ using (var scope = app.Services.CreateScope())
         }
     }
 }
+
+// Enable Swagger in all environments for debugging accessibility
+app.UseSwagger();
+app.UseSwaggerUI(c => {
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Velvet & Ivory API V1");
+    c.RoutePrefix = "swagger"; // Ensure it stays on /swagger
+});
+
+if (app.Environment.IsDevelopment())
+{
+    // ... development specific config if any later
+}
+
+// app.UseHttpsRedirection(); // Disabled to prevent CORS issues with HTTP frontend calls
+
+app.UseRouting();
+app.UseCors("AllowAll");
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
+
+
 
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 app.Run($"http://0.0.0.0:{port}");
