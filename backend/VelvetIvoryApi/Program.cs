@@ -113,6 +113,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAll",
         b => b.WithOrigins(
                 "https://sexshop-22tb.vercel.app",
+                "https://sexshop-i9h6.vercel.app",
                 "https://sexshop-hj7j.onrender.com",
                 "http://localhost:5173")
               .AllowAnyMethod()
