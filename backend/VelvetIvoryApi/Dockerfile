@@ -20,6 +20,7 @@ RUN apt-get update && apt-get install -y curl
 
 # Environment variables
 ENV ASPNETCORE_URLS=http://0.0.0.0:8080
+# Render sets PORT automatically, but we set a default just in case
 ENV PORT=8080
 
 EXPOSE 8080
