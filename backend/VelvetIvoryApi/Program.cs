@@ -56,14 +56,6 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 .AddEntityFrameworkStores<AppDbContext>()
 .AddDefaultTokenProviders();
 
-// ... (existing JWT config) ...
-
-// ... (existing DB context config) ...
-
-
-// ... (existing JWT config) ...
-
-
 // JWT Authentication
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var jwtKey = builder.Configuration["Jwt:Key"] ?? Environment.GetEnvironmentVariable("JWT_KEY");
@@ -119,7 +111,10 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll",
-        b => b.WithOrigins("https://sexshop-22tb.vercel.app", "http://localhost:5173")
+        b => b.WithOrigins(
+                "https://sexshop-22tb.vercel.app",
+                "https://sexshop-hj7j.onrender.com",
+                "http://localhost:5173")
               .AllowAnyMethod()
               .AllowAnyHeader()
               .AllowCredentials());
